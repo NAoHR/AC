@@ -13,8 +13,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "checkJs": false
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "backend/models/admin.model.js", "backend/models/Customer.model.js"],
   "exclude": ["node_modules"]
 }

@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, models, model } from "mongoose";
 
 const AdminSchema = new Schema({
     username: {
@@ -11,5 +11,5 @@ const AdminSchema = new Schema({
     }
 })
 
-const AdminModel = model.Admin ||  model("Admin", AdminSchema);
+const AdminModel = models.Admin ||  model("Admin", AdminSchema);
 export default AdminModel;

@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, models, model } from "mongoose";
 
 const CustSchema = new Schema({
     nama: {
@@ -29,5 +29,5 @@ const CustSchema = new Schema({
 })
 
 
-const CustomerModel = model.Cust || model("Cust", CustSchema);
+const CustomerModel = models.Cust || model("Cust", CustSchema);
 export default CustomerModel;

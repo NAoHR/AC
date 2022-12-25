@@ -52,6 +52,18 @@ const errorHandler = (errorMessage: Record<any, any> , res: NextApiResponse) => 
                     return errMess();
 
             }
+        case "TokenExpiredError" :
+            return res.status(401).json({
+                ok : false,
+                failedLoginRelated : true,
+                message : "Session expired"
+            });
+        case "JsonWebTokenError":
+            return res.status(401).json({
+                ok : false,
+                failedLoginRelated : true,
+                message : errorMessage.message
+            })
         case "PVF":
             return errMess(403, "Password validation failed", "password should contain lowercase,uppercase,number, and symbol")
         case "MongooseError":

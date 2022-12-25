@@ -1,3 +1,5 @@
+import {Model} from "mongoose"
+
 export interface ILogKontak {
     tanggal: Date,
     status: "pending" | "mau" | "tidak"
@@ -13,5 +15,11 @@ export interface ICustomer {
 
 export interface IAdmin {
     username : String,
-    password: String
+    password: String,
+    _id: string
+}
+
+export interface IBodyLogin {
+    username: String,
+    password: string
 }

@@ -2,7 +2,7 @@ import { IAdmin, IBodyLogin } from "../../interfaces/backend";
 import { NextApiRequest, NextApiResponse } from "next";
 
 import connectDB from "../../backend/middleware/connectDB";
-import decideMethod from "../../backend/middleware/decideMethod";
+import decideMethod from "../../backend/middleware/decidemethodMiddleware";
 import AdminModel from "../../backend/models/admin.model";
 import errorHanler from "../../backend/utils/errorHandler";
 import bcrypt from "bcrypt";

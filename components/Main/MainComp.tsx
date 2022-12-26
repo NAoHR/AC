@@ -1,7 +1,7 @@
 import {Container, Group, Flex, useMantineTheme} from "@mantine/core";
 
-import DataDetail from "./Main/DataDetails";
-import DataMain from "./Main/DataMain";
+import DataDetail from "./subcomponents/DataDetails";
+import DataMain from "./subcomponents/DataMain";
 
 
 

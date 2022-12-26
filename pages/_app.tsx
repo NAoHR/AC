@@ -1,7 +1,9 @@
 import '../styles/globals.css';
+import 'react-toastify/dist/ReactToastify.css';
 import type { AppProps } from 'next/app';
 import {MantineProvider} from "@mantine/core";
 import Head from 'next/head';
+import { ToastContainer } from 'react-toastify';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -28,6 +30,18 @@ export default function App({ Component, pageProps }: AppProps) {
     >
       <Component {...pageProps} />
     </MantineProvider>
+    <ToastContainer
+      position="top-right"
+      autoClose={2200}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      theme={"dark"}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
   </>
   )
 }

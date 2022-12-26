@@ -10,10 +10,17 @@ import CustomerModel from "../../../backend/models/Customer.model";
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try{
 
-        const custs = await CustomerModel.find();
+        const custs = await CustomerModel.aggregate([
+            {
+                $group : {
+                    _id : '$bulan',
+                    count: {$sum: 1}
+                }
+            }
+        ])
+
         return res.status(200).json({
             ok: true,
-            message: "success",
             data: custs
         })
 

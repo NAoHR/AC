@@ -36,4 +36,4 @@ const handler = async (req, res) => {
     }
 }
 
-export default authenticationMiddleware(decideMethod(connectDB(handler), "get"))
+export default decideMethod(connectDB(authenticationMiddleware(handler)), "get")

@@ -33,4 +33,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 }
 
-export default authenticationMiddleware(decideMethod(connectDB(handler), "get"))
+export default decideMethod(connectDB(authenticationMiddleware(handler)), "get")

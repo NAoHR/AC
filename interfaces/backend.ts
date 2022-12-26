@@ -1,4 +1,4 @@
-import {Model} from "mongoose"
+import { NextApiRequest } from "next";
 
 export interface ILogKontak {
     tanggal: Date,
@@ -6,6 +6,7 @@ export interface ILogKontak {
 }
 
 export interface ICustomer {
+    _id: String,
     nama: String,
     telepon: String,
     alamat : String,
@@ -22,4 +23,19 @@ export interface IAdmin {
 export interface IBodyLogin {
     username: String,
     password: string
+}
+
+export interface IZustandStore {
+    user : {
+        username: String
+    },
+    currentModified: {
+        display: boolean,
+
+    }
+    ,customers : ICustomer[],
+}
+
+export interface IAdminExtendsNextAPI extends NextApiRequest {
+    admin? : IAdmin
 }

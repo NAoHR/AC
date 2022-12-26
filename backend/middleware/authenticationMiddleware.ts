@@ -1,11 +1,12 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
+import { IAdminExtendsNextAPI } from "../../interfaces/backend";
 
 import AdminModel from "../models/admin.model";
 import errorHandler from "../utils/errorHandler";
 import jwt from "jsonwebtoken";
 
-const authenticationMiddleware = (handler: NextApiHandler) => {
-    return async (req: NextApiRequest, res: NextApiResponse) => {
+const authenticationMiddleware = (handler: (req: IAdminExtendsNextAPI | NextApiRequest, res: NextApiResponse) => Promise<unknown>) => {
+    return async (req: IAdminExtendsNextAPI, res: NextApiResponse) => {
         try{
 
             const {authorization} = req.headers;
@@ -18,6 +19,8 @@ const authenticationMiddleware = (handler: NextApiHandler) => {
 
                 const admin = await AdminModel.findOne({_id: token})
                 if(admin){
+                    req.admin = admin;
+
                     return handler(req, res);
                 }
                 return res.status(403).json({

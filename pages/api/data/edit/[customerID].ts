@@ -23,7 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         })
 
         if(updateCreds.matchedCount !== 0){
-            if(updateCreds.modifiedCount || updateCreds.upsertedCount){
+            if(updateCreds.modifiedCount){
                 return res.status(200).json({
                     ok : true,
                     message : "data updated"

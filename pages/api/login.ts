@@ -34,7 +34,10 @@ res:NextApiResponse
 
                     return res.status(200).json({
                         ok: true,
-                        token: acToken
+                        data: {
+                            token: acToken,
+                            username : person.username
+                        }
                     })
                 }
                 return res.status(401).json({

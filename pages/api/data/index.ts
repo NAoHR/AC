@@ -5,10 +5,12 @@ import authenticationMiddleware from "../../../backend/middleware/authentication
 
 import connectDB from "../../../backend/middleware/connectDB";
 import errorHandler from "../../../backend/utils/errorHandler";
-import CustomerModel from "../../../backend/models/Customer.model";
+import CustSchema from "../../../backend/models/Customer.model";
+import {models, model} from "mongoose";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     try{
+        const CustomerModel = models.Cust || model("Cust", CustSchema)
 
         const custs = await CustomerModel.aggregate([
             {

@@ -1,6 +1,6 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 
-const decideMethod = (handler: NextApiHandler, method: "get" | "post" | "put") => {
+const decideMethod = (handler: NextApiHandler, method: "get" | "post" | "put" | "delete") => {
     return async (req: NextApiRequest, res: NextApiResponse) => {
         try{
 

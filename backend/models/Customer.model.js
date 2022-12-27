@@ -15,6 +15,7 @@ const CustSchema = new Schema({
     },
     bulan: {
         type: String,
+        enum: ["januari", "februari", "maret", "april", "may", "juni", "juli", "agustus", "september", "oktober", "november", "desember"],
         required: [true, "bulan required"]
     },
     logKontak: [

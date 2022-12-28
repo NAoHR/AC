@@ -23,6 +23,20 @@ const apiMethod = {
                 Authorization : getToken()
             }
         })
+    },
+    getDatas: function(page=1){
+        return axios.get(`/api/data?page=${page}`, {
+            headers : {
+                Authorization : getToken()
+            }
+        })
+    },
+    getDetails: function(page=1){
+        return axios.get(`/api/data/detail`, {
+            headers : {
+                Authorization : getToken()
+            }
+        })
     }
 }
 

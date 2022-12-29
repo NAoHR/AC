@@ -39,6 +39,7 @@ export interface IZustandStore {
         username: String,
         isLoggedIn: boolean
     },
+    contentEditables: boolean,
     pagination: {
         current: number,
         total: number,
@@ -53,13 +54,14 @@ export interface IZustandStore {
         data: ICustomer | ""
     },
     customers : ICustomer[] | boolean,
-    customersStats: ICustStat[],
+    customersStats: ICustStat[] | boolean,
 
 
     updateUser : (username: String, isLoggedIn: boolean) => void,
     updateCustomers: (data: ICustomer[]) => void
-    updateStats: (isInit: boolean, data: ICustStat[] | ICustStat, num: number) => void,
+    updateStats: (isInit: boolean, data: ICustStat[] | ICustStat | boolean, num: number) => void,
     setPagination: (data: ICustPagination) => void
+    updateEditable: (val: boolean) => void,
     addCustomer: (data: ICustomer) => void,
     deleteCustomer: (id: String) => void
 }

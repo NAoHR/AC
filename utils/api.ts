@@ -31,7 +31,7 @@ const apiMethod = {
             }
         })
     },
-    getDetails: function(page=1){
+    getDetails: function(){
         return axios.get(`/api/data/detail`, {
             headers : {
                 Authorization : getToken()

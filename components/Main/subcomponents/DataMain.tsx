@@ -12,7 +12,7 @@ import apiMethod from "../../../utils/api";
 import { ICustomer } from "../../../interfaces/backend";
 
 const DataCard: FC<ICustomer> = ({_id, alamat, bulan, logKontak, nama, telepon}) => {
-    const pagination = useAdminStore(state => state.pagination);
+    const contentEditables = useAdminStore(state => state.contentEditables)
 
     return (
     <>
@@ -41,17 +41,20 @@ const DataCard: FC<ICustomer> = ({_id, alamat, bulan, logKontak, nama, telepon})
                 </Card.Section>
                 
                 <Card.Section p="sm">
+                    <Text color={logKontak.length == 0 ? "red" : "white"} lineClamp={3} mb="xs">
+                        {logKontak.length == 0 ? "Belum pernah dihubungi" : `${logKontak.length} kali dihubungi`}
+                    </Text>
                     <Flex gap="xs" pr="xs">
-                        <Button color={"grape"} variant="light" disabled={pagination.isDisabled}>
+                        <Button color={"grape"} variant="light" disabled={contentEditables}>
                             <IconSend />
                         </Button>
-                        <Button color={"blue"} variant="light" disabled={pagination.isDisabled}>
+                        <Button color={"blue"} variant="light" disabled={contentEditables}>
                             <IconFileDescription />
                         </Button>
-                        <Button color={"teal"} variant="light" disabled={pagination.isDisabled}>
+                        <Button color={"teal"} variant="light" disabled={contentEditables}>
                             <IconEdit />
                         </Button>
-                        <Button color={"red"} variant="light" disabled={pagination.isDisabled}>
+                        <Button color={"red"} variant="light" disabled={contentEditables}>
                             <IconTrash />
                         </Button>
                     </Flex>
@@ -65,8 +68,10 @@ const DataCard: FC<ICustomer> = ({_id, alamat, bulan, logKontak, nama, telepon})
 
 const Paginate = () => {
     const pagination = useAdminStore(state => state.pagination);
+    const contentEditables = useAdminStore(state => state.contentEditables);
     const setPagination = useAdminStore(state => state.setPagination);
-    const setCustomer = useAdminStore(state => state.updateCustomers)
+    const setCustomer = useAdminStore(state => state.updateCustomers);
+    const updateEditable = useAdminStore(state => state.updateEditable);
 
 
     function handleChange(v:number){
@@ -75,6 +80,7 @@ const Paginate = () => {
             isDisabled: true,
             total: pagination.total
         })
+        updateEditable(true);
         apiMethod.getDatas(v)
             .then((v) => {
                 const {page, totalPages} = v.data.data;
@@ -86,10 +92,12 @@ const Paginate = () => {
                     isDisabled: false,
                     total: totalPages
                 })
+                updateEditable(false);
             })
             .catch((e)=>{
                 console.log(e);
             }).finally(()=>{
+                updateEditable(useAdminStore.getState().contentEditables);
                 setPagination({
                     ...useAdminStore.getState().pagination,
                     isDisabled: false
@@ -98,7 +106,7 @@ const Paginate = () => {
                 
             })
     }
-    return <Pagination page={pagination.current} onChange={handleChange} total={pagination.total} color={"grape"} disabled={pagination.isDisabled} />
+    return <Pagination page={pagination.current} onChange={handleChange} total={pagination.total} color={"grape"} disabled={contentEditables} />
 }
 
 

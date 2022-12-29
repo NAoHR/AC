@@ -19,11 +19,9 @@ const handler = async (req, res) => {
               locale: 'en',
             },
         };
-
-        const cs = CustSchema.plugin(mongoosePaginate);
-
-        const CustomerModel = models.Cust || model("Cust", cs);
-
+        
+        let CustomerModel = models.Cust || model("Cust", CustSchema);
+        CustomerModel.paginate = mongoosePaginate.paginate
 
         const customers = await CustomerModel.paginate({}, options);
 

@@ -6,6 +6,7 @@ const init: IZustandStore = {
         username: "",
         isLoggedIn: false
     },
+    contentEditables: false,
     pagination: {
         current: 0,
         total: 0,
@@ -24,6 +25,7 @@ const init: IZustandStore = {
     updateCustomers() {},
     updateStats() {},
     setPagination() {},
+    updateEditable(){},
     updateUser() {},
     addCustomer() {},
     deleteCustomer() {}
@@ -41,25 +43,33 @@ const useAdminStore = create<IZustandStore>(( set, get ) => ({
         set({customers: data})
     },
     updateStats(isInit, data, num){
-        if(isInit && Array.isArray(data)){
-            set({customersStats: data})
+        const stats = get().customersStats;
+        if(typeof stats !== "boolean"){
+            if(isInit && Array.isArray(data)){
+                set({customersStats: data})
+            }else{
+                set((state) => {
+                    return {
+                        ...state,
+                        customersStats: stats.map((v)=> {
+                            if(v._id == "maret"){
+                                return {_id: v._id, "count" : v.count + num}}
+                            else {
+                                return v
+                            }
+                        })
+                    }
+                })
+            }
         }else{
-            set((state) => {
-                return {
-                    ...state,
-                    customersStats: state.customersStats.map((v)=> {
-                        if(v._id == "maret"){
-                            return {_id: v._id, "count" : v.count + num}}
-                        else {
-                            return v
-                        }
-                    })
-                }
-            })
+            set({customersStats: false})
         }
     },
     setPagination(data) {
         set({pagination: data})
+    },
+    updateEditable(val) {
+        set({contentEditables: val})
     },
 
     // data manipulation related

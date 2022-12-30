@@ -10,9 +10,12 @@ import { FC, Key, use, useEffect, useState } from "react";
 import useAdminStore from "../../../utils/stores";
 import apiMethod from "../../../utils/api";
 import { ICustomer } from "../../../interfaces/backend";
+import ModalsManager from "./ModalsManager";
 
 const DataCard: FC<ICustomer> = ({_id, alamat, bulan, logKontak, nama, telepon}) => {
-    const contentEditables = useAdminStore(state => state.contentEditables)
+    const contentEditables = useAdminStore(state => state.contentEditables);
+    const setCurrentModified = useAdminStore(state => state.setCurrentModified);
+    const data = {_id, alamat, bulan, logKontak, nama, telepon}
 
     return (
     <>
@@ -20,7 +23,7 @@ const DataCard: FC<ICustomer> = ({_id, alamat, bulan, logKontak, nama, telepon})
         shadow="sm"
         p={0}
         w="370px"
-
+        withBorder
         >
             <Flex direction={"column"} justify="space-between" h="100%">
                 <Card.Section p="sm" mt="0px" >
@@ -45,10 +48,10 @@ const DataCard: FC<ICustomer> = ({_id, alamat, bulan, logKontak, nama, telepon})
                         {logKontak.length == 0 ? "Belum pernah dihubungi" : `${logKontak.length} kali dihubungi`}
                     </Text>
                     <Flex gap="xs" pr="xs">
-                        <Button color={"grape"} variant="light" disabled={contentEditables}>
+                        <Button color={"grape"} variant="light" disabled={contentEditables} >
                             <IconSend />
                         </Button>
-                        <Button color={"blue"} variant="light" disabled={contentEditables}>
+                        <Button color={"blue"} variant="light" disabled={contentEditables} onClick={()=>{setCurrentModified(true, "detail", data)}}>
                             <IconFileDescription />
                         </Button>
                         <Button color={"teal"} variant="light" disabled={contentEditables}>
@@ -176,6 +179,7 @@ const DataMain = () => {
             <Flex wrap={"wrap"} gap="sm" mt="md">
                 <Looper />
             </Flex>
+            <ModalsManager />
         </Flex>
         </>
     )

@@ -24,6 +24,9 @@ export default function App({ Component, pageProps }: AppProps) {
             backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2],
             color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.dark[4],
             lineHeight: theme.lineHeight,
+          },
+          ".pointer": {
+            cursor: "pointer"
           }
         })
       }}

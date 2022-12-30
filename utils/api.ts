@@ -1,4 +1,5 @@
 import axios, {AxiosRequestConfig} from "axios";
+import {ICustomer} from "../interfaces/backend";
 
 interface Ilogin {
     username: string
@@ -14,6 +15,14 @@ const apiMethod = {
     login : function(body: AxiosRequestConfig<Ilogin>){
         const {data} = body;
         return axios.post("/api/login", data);
+    },
+    addData : function(body: AxiosRequestConfig<Omit<ICustomer, "_id" | "logKontak">>){
+        const {data} = body;
+        return axios.post("/api/data/add", data, {
+            headers : {
+                Authorization : getToken()
+            }
+        });
     },
 
     // get

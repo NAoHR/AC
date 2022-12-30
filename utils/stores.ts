@@ -1,5 +1,5 @@
 import create from 'zustand';
-import { IZustandStore } from '../interfaces/backend';
+import { ICustomer, IZustandStore } from '../interfaces/backend';
 
 const init: IZustandStore = {
     user : {
@@ -44,7 +44,7 @@ const useAdminStore = create<IZustandStore>(( set, get ) => ({
     updateCustomers(data) {
         set({customers: data})
     },
-    updateStats(isInit, data, num){
+    updateStats(isInit, data, num, month){
         const stats = get().customersStats;
         if(typeof stats !== "boolean"){
             if(isInit && Array.isArray(data)){
@@ -54,7 +54,7 @@ const useAdminStore = create<IZustandStore>(( set, get ) => ({
                     return {
                         ...state,
                         customersStats: stats.map((v)=> {
-                            if(v._id == "maret"){
+                            if(v._id == month){
                                 return {_id: v._id, "count" : v.count + num}}
                             else {
                                 return v
@@ -87,7 +87,8 @@ const useAdminStore = create<IZustandStore>(( set, get ) => ({
     addCustomer(data) {
         const customers = get().customers;
         if(typeof customers !== 'boolean'){
-            set({customers: [data].concat(customers)})
+            const newData = [data].concat(customers)
+            set({customers: newData})
         }
     },
     deleteCustomer(id) {

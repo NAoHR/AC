@@ -18,12 +18,14 @@ const init: IZustandStore = {
     },
     currentModified: {
         display: false,
-        data: ""
+        method: "",
+        data: null
     },
     customers : [],
     customersStats: [],
     updateCustomers() {},
     updateStats() {},
+    setCurrentModified(){},
     setPagination() {},
     updateEditable(){},
     updateUser() {},
@@ -70,6 +72,15 @@ const useAdminStore = create<IZustandStore>(( set, get ) => ({
     },
     updateEditable(val) {
         set({contentEditables: val})
+    },
+    setCurrentModified(status, method ,data) {
+        return set({
+            currentModified : {
+                display: status,
+                method: method,
+                data: data
+            }
+        })        
     },
 
     // data manipulation related

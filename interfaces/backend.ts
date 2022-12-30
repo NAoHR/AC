@@ -51,7 +51,8 @@ export interface IZustandStore {
     },
     currentModified: {
         display: boolean,
-        data: ICustomer | ""
+        method: "detail" | "edit" | "delete" | "add" | "",
+        data: ICustomer | null
     },
     customers : ICustomer[] | boolean,
     customersStats: ICustStat[] | boolean,
@@ -60,6 +61,7 @@ export interface IZustandStore {
     updateUser : (username: String, isLoggedIn: boolean) => void,
     updateCustomers: (data: ICustomer[]) => void
     updateStats: (isInit: boolean, data: ICustStat[] | ICustStat | boolean, num: number) => void,
+    setCurrentModified: (status: boolean, method:"detail" | "edit" | "delete" | "add" | "", data: null | ICustomer) => void
     setPagination: (data: ICustPagination) => void
     updateEditable: (val: boolean) => void,
     addCustomer: (data: ICustomer) => void,

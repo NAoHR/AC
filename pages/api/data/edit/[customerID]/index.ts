@@ -1,8 +1,8 @@
-import errorHandler from "../../../../backend/utils/errorHandler";
-import CustSchema from "../../../../backend/models/Customer.model";
-import decideMethod from "../../../../backend/middleware/decidemethodMiddleware";
-import authenticationMiddleware from "../../../../backend/middleware/authenticationMiddleware";
-import connectDB from "../../../../backend/middleware/connectDB";
+import errorHandler from "../../../../../backend/utils/errorHandler";
+import CustSchema from "../../../../../backend/models/Customer.model";
+import decideMethod from "../../../../../backend/middleware/decidemethodMiddleware";
+import authenticationMiddleware from "../../../../../backend/middleware/authenticationMiddleware";
+import connectDB from "../../../../../backend/middleware/connectDB";
 
 import { NextApiRequest, NextApiResponse } from "next";
 import { model, models } from "mongoose";

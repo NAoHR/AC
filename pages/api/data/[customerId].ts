@@ -20,7 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 message: customer
             })
         }
-        throw("DNF")
+        throw({name: "DNF"})
     }catch(e){
         const newE = e as Error;
         return errorHandler(newE, res)

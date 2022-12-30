@@ -4,15 +4,17 @@ export interface ILogKontak {
     tanggal: Date,
     status: "pending" | "mau" | "tidak"
 }
+export type TMonth = "januari" | "februari" | "maret" | "april" | "may" | "juni" | "juli" | "agustus" | "september" | "oktober" | "november" | "desember"
 
 export interface ICustomer {
     _id: String,
     nama: String,
     telepon: String,
     alamat : String,
-    bulan: String,
+    bulan: TMonth,
     logKontak: Array<ILogKontak>
 }
+
 
 export interface IAdmin {
     username : String,
@@ -60,7 +62,7 @@ export interface IZustandStore {
 
     updateUser : (username: String, isLoggedIn: boolean) => void,
     updateCustomers: (data: ICustomer[]) => void
-    updateStats: (isInit: boolean, data: ICustStat[] | ICustStat | boolean, num: number) => void,
+    updateStats: (isInit: boolean, data: ICustStat[] | ICustStat | boolean, num: number, month: "januari" | "februari" | "maret" | "april" | "may" | "juni" | "juli" | "agustus" | "september" | "oktober" | "november" | "desember") => void,
     setCurrentModified: (status: boolean, method:"detail" | "edit" | "delete" | "add" | "", data: null | ICustomer) => void
     setPagination: (data: ICustPagination) => void
     updateEditable: (val: boolean) => void,

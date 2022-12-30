@@ -1,5 +1,6 @@
 import { Navbar, MultiSelect, TextInput, Flex, Group, Avatar, Text, useMantineTheme} from "@mantine/core";
 import {IconSearch, IconCirclePlus, IconAdjustmentsAlt, IconRefresh} from "@tabler/icons";
+import useAdminStore from "../utils/stores";
 
 interface Navbar {
     opened: boolean
@@ -7,6 +8,7 @@ interface Navbar {
 
 export default function NavbarComp(props: Navbar){
     const theme = useMantineTheme();
+    const setCurrentModified = useAdminStore(state => state.setCurrentModified);
 
     return (
         <>
@@ -16,7 +18,7 @@ export default function NavbarComp(props: Navbar){
             gap={"sm"}
             >
                 <Text fw={600}>Terkait Data</Text>
-                <Group bg={`${theme.colorScheme == 'dark' ? "dark.5" : "gray.1"}`}>
+                <Group bg={`${theme.colorScheme == 'dark' ? "dark.5" : "gray.1"}`} onClick={()=>{setCurrentModified(true, "add", null)}} className="pointer">
                     <Avatar color="green" radius={"xs"}>
                         <IconCirclePlus size={20} />
                     </Avatar>

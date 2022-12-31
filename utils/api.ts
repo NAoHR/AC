@@ -26,6 +26,14 @@ const apiMethod = {
             }
         });
     },
+    addlog : function(body: AxiosRequestConfig<Id>){
+        const {data} = body;
+        return axios.post(`/api/data/edit/${data}/addLog`, {}, {
+            headers : {
+                Authorization : getToken()
+            }
+        })
+    },
 
     // get
     isLoggedIn : function(){

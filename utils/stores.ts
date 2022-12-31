@@ -30,7 +30,8 @@ const init: IZustandStore = {
     updateEditable(){},
     updateUser() {},
     addCustomer() {},
-    deleteCustomer() {}
+    deleteCustomer() {},
+    editCustomer() {},
 }
 
 const useAdminStore = create<IZustandStore>(( set, get ) => ({
@@ -95,6 +96,17 @@ const useAdminStore = create<IZustandStore>(( set, get ) => ({
         const customers = get().customers;
         if(typeof customers !== 'boolean'){
             set({customers: customers.filter((v) => v._id !== id)})
+        }
+    },
+    editCustomer(id, data) {
+        const customers = get().customers;
+        if(typeof customers !== 'boolean'){
+            set({customers: customers.map((v) => {
+                if(v._id == id){
+                    return data
+                }
+                return v
+            })})
         }
     }
 }))

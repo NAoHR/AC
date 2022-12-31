@@ -48,7 +48,7 @@ const DataCard: FC<ICustomer> = ({_id, alamat, bulan, logKontak, nama, telepon})
                         {logKontak.length == 0 ? "Belum pernah dihubungi" : `${logKontak.length} kali dihubungi`}
                     </Text>
                     <Flex gap="xs" pr="xs">
-                        <Button color={"grape"} variant="light" disabled={contentEditables} >
+                        <Button color={"grape"} variant="light" disabled={contentEditables} onClick={()=>{setCurrentModified(true, "message", data)}}>
                             <IconSend />
                         </Button>
                         <Button color={"blue"} variant="light" disabled={contentEditables} onClick={()=>{setCurrentModified(true, "detail", data)}}>

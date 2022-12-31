@@ -1,15 +1,17 @@
 import useAdminStore from "../../../utils/stores";
 import { Modal, Title, Text, List, ThemeIcon, Flex, TextInput, Textarea, Select, Button } from "@mantine/core";
-import { IconPhone, IconHome, IconMoon } from "@tabler/icons";
-import { FormEvent, useRef, useState } from "react";
+import { IconPhone, IconHome } from "@tabler/icons";
+
+import { FormEvent, useEffect, useRef, useState } from "react";
 import apiMethod from "../../../utils/api";
-import { TMonth } from "../../../interfaces/backend";
+import { ICustomer, TMonth } from "../../../interfaces/backend";
 
 const DetailModal = () => {
     const currentModified = useAdminStore(state => state.currentModified);
     const setCurrentModified = useAdminStore(state => state.setCurrentModified);
 
     function LooperLogPanggilan(){
+        
         const logpanggilan = currentModified.data?.logKontak
 
         if(logpanggilan){
@@ -17,6 +19,8 @@ const DetailModal = () => {
                 return <>
                     {
                         logpanggilan.map((v) => {
+                            v.tanggal = new Date(v.tanggal);
+
                             return (
                                 <Flex justify={"space-between"} w="100%">
                                     <Text fw="bold">
@@ -203,6 +207,7 @@ const DeleteModal = () => {
     const [reqFinished, setRF] = useState<boolean>(true);
     const currentModified = useAdminStore(state => state.currentModified);
     const setCurrentModified = useAdminStore(state => state.setCurrentModified);
+    const updateStats = useAdminStore(state => state.updateStats);
     const deleteCustomers = useAdminStore(state => state.deleteCustomer);
 
     function deleteData(){
@@ -211,7 +216,9 @@ const DeleteModal = () => {
             apiMethod.deleteCustomer({data: currentModified.data._id})
                 .then((v) => {
                     if(currentModified.data?._id){
+                        
                         deleteCustomers(currentModified.data?._id)
+                        updateStats(false, false, -1, currentModified.data?.bulan);
                         setCurrentModified(false, "", null);
                     }
                 })
@@ -252,12 +259,82 @@ const DeleteModal = () => {
     )
 }
 
+const SendMessageModal = () => {
+    const [reqFinished, setRF] = useState<boolean>(true);
+    const currentModified = useAdminStore(state => state.currentModified);
+    const setCurrentModified = useAdminStore(state => state.setCurrentModified);
+    const editCustomer = useAdminStore(state => state.editCustomer);
+    const [text, setT] = useState<string>("");
+
+    useEffect(()=>{
+        const date = new Date().getHours();
+        
+        const greet = date > 0 && date < 12 ? "Selamat Pagi" : date >= 12 && date <= 15 ? "Selamat Siang" : date > 15 && date <= 18 ? "Selamat Sore" : "Selamat Malam";
+        setT(`${greet}, Yth, ${currentModified?.data?.nama} Pelanggan Panasonic. Kami dari Otorize Service Panasonic Menginfokan Bahwa Ac anda sudah waktunya melakukan perawatan rutin berkala. Jika anda berkenan silahkan balas Pesan ini agar dapat segera di Tindak Lanjuti`)
+    }, [currentModified])
+
+
+    function sendData() {
+        setRF(!reqFinished);
+        apiMethod.addlog({data: currentModified.data?._id})
+            .then((v) => {
+                const data = v.data.data as ICustomer;
+                window.open(`https://api.whatsapp.com/send?phone=62${currentModified.data?.telepon}&text=${text}`, '_blank');
+                if(currentModified.data?._id){
+                    editCustomer(currentModified.data?._id, data);
+                }
+                setCurrentModified(false, "", null);
+            })
+            .catch((e) => {
+                console.log("error");
+                
+            })
+            .finally(()=>{
+                setRF(prev => !prev);
+            })
+    }
+
+    return (
+        <Modal
+            overlayOpacity={0.55}
+            overlayBlur={3}
+            overflow={"inside"}
+            opened={currentModified.display && currentModified.method == "message"}
+            onClose={()=> {if (reqFinished) setCurrentModified(false, "", null)}}
+            title={
+                <Title order={5} mt={"xs"} color={"dimmed"}>
+                    Kirim Pesan
+                </Title>
+            }
+        >   
+        <Text>
+            Apakah Anda ingin mengirim pesan ke <span style={{fontWeight: "bold"}}>{currentModified.data?.nama}</span>
+        </Text>
+        <Textarea
+        placeholder="Autosize with no rows limit"
+        mt={"sm"}
+        onChange={(e)=> {setT(e.target.value)}}
+        value={text.toLowerCase()}
+        autosize
+        minRows={2}
+        autoCorrect={"false"}
+        />
+
+        <Flex mt="sm" gap={"sm"} justify="flex-end">
+            <Button  disabled={!reqFinished} variant="light" onClick={sendData} >Kirim dengan Database</Button>
+            <Button  component="a" href={`https://api.whatsapp.com/send?phone=62${currentModified.data?.telepon}&text=${text}`} target={"_blank"} variant="light" color={"red"} onClick={()=> {if (reqFinished) setCurrentModified(false, "", null)}}>Hanya Kirim</Button>
+        </Flex>
+      </Modal>
+    )
+}
+
 const ModalsManager = () => {
     return (
         <>
             <DetailModal />
             <AddModal />
             <DeleteModal />
+            <SendMessageModal />
         </>
     )
 }

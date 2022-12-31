@@ -53,7 +53,7 @@ export interface IZustandStore {
     },
     currentModified: {
         display: boolean,
-        method: "detail" | "edit" | "delete" | "add" | "",
+        method: "detail" | "edit" | "delete" | "add" | "message" |"",
         data: ICustomer | null
     },
     customers : ICustomer[] | boolean,
@@ -63,11 +63,12 @@ export interface IZustandStore {
     updateUser : (username: String, isLoggedIn: boolean) => void,
     updateCustomers: (data: ICustomer[]) => void
     updateStats: (isInit: boolean, data: ICustStat[] | ICustStat | boolean, num: number, month: "januari" | "februari" | "maret" | "april" | "may" | "juni" | "juli" | "agustus" | "september" | "oktober" | "november" | "desember") => void,
-    setCurrentModified: (status: boolean, method:"detail" | "edit" | "delete" | "add" | "", data: null | ICustomer) => void
+    setCurrentModified: (status: boolean, method:"detail" | "edit" | "delete" | "add" | "message" | "", data: null | ICustomer) => void
     setPagination: (data: ICustPagination) => void
     updateEditable: (val: boolean) => void,
     addCustomer: (data: ICustomer) => void,
-    deleteCustomer: (id: String) => void
+    deleteCustomer: (id: String) => void,
+    editCustomer: (id: String, data: ICustomer) => void
 }
 
 export interface IAdminExtendsNextAPI extends NextApiRequest {

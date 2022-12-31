@@ -6,9 +6,7 @@ interface Ilogin {
     password: string
 }
 
-interface Id {
-    id: String
-}
+type Id = String;
 
 const getToken = () => {
     return window.localStorage.getItem("token")

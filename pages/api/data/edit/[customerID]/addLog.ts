@@ -26,7 +26,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             await customer.save();
             
             return res.status(200).json({
-                ok: true
+                ok: true,
+                data: customer
             })
         }
         throw({name: "DNF"})

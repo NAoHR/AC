@@ -62,7 +62,7 @@ export interface IZustandStore {
 
     updateUser : (username: String, isLoggedIn: boolean) => void,
     updateCustomers: (data: ICustomer[]) => void
-    updateStats: (isInit: boolean, data: ICustStat[] | ICustStat | boolean, num: number, month: "januari" | "februari" | "maret" | "april" | "may" | "juni" | "juli" | "agustus" | "september" | "oktober" | "november" | "desember") => void,
+    updateStats: (isInit: boolean, data: ICustStat[] | ICustStat | boolean, num: number, month?: "januari" | "februari" | "maret" | "april" | "may" | "juni" | "juli" | "agustus" | "september" | "oktober" | "november" | "desember") => void,
     setCurrentModified: (status: boolean, method:"detail" | "edit" | "delete" | "add" | "message" | "", data: null | ICustomer) => void
     setPagination: (data: ICustPagination) => void
     updateEditable: (val: boolean) => void,

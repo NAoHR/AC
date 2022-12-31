@@ -18,11 +18,11 @@ const DetailModal = () => {
             if(logpanggilan.length > 0){
                 return <>
                     {
-                        logpanggilan.map((v) => {
+                        logpanggilan.map((v, i) => {
                             v.tanggal = new Date(v.tanggal);
 
                             return (
-                                <Flex justify={"space-between"} w="100%">
+                                <Flex justify={"space-between"} w="100%" key={i}>
                                     <Text fw="bold">
                                         {v.tanggal.getDate()}/
                                         {v.tanggal.getMonth()}/

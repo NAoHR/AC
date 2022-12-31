@@ -192,9 +192,62 @@ const AddModal = () => {
                     { value: 'desember', label: 'desember' },
                 ]}
                 />
-                <Button w="130px" style={{alignSelf: "flex-end"}} type="submit" disabled={!reqFinished} >Submit</Button>
+                <Button w="130px" style={{alignSelf: "flex-end"}} type="submit" disabled={!reqFinished} variant="light" >Submit</Button>
             </Flex>
         </form>
+      </Modal>
+    )
+}
+
+const DeleteModal = () => {
+    const [reqFinished, setRF] = useState<boolean>(true);
+    const currentModified = useAdminStore(state => state.currentModified);
+    const setCurrentModified = useAdminStore(state => state.setCurrentModified);
+    const deleteCustomers = useAdminStore(state => state.deleteCustomer);
+
+    function deleteData(){
+        setRF(!reqFinished);
+        if(currentModified.data?._id){
+            apiMethod.deleteCustomer({data: currentModified.data._id})
+                .then((v) => {
+                    if(currentModified.data?._id){
+                        deleteCustomers(currentModified.data?._id)
+                        setCurrentModified(false, "", null);
+                    }
+                })
+                .catch((e) => {
+                    console.log(e);
+                })
+                .finally(()=>{
+                    setRF(prev => !prev);
+                })
+        }
+
+
+        
+    }
+
+    return (
+        <Modal
+            overlayOpacity={0.55}
+            overlayBlur={3}
+            overflow={"inside"}
+            opened={currentModified.display && currentModified.method == "delete"}
+            onClose={()=> {if (reqFinished) setCurrentModified(false, "", null)}}
+            title={
+                <Title order={5} mt={"xs"} color={"dimmed"}>
+                    Hapus Data Customer
+                </Title>
+            }
+        >   
+        <Text>
+            Apakah kamu yakin untuk menghapus data <span style={{fontWeight: "bold"}}>{currentModified.data?.nama}</span>
+        </Text>
+        
+        <Flex gap={"sm"} mt="md">
+            <Button  disabled={!reqFinished} variant="light" onClick={deleteData}>Yakin</Button>
+            <Button  disabled={!reqFinished} variant="light" color={"red"} onClick={()=> {if (reqFinished) setCurrentModified(false, "", null)}}>Tidak</Button>
+        </Flex>
       </Modal>
     )
 }
@@ -204,8 +257,9 @@ const ModalsManager = () => {
         <>
             <DetailModal />
             <AddModal />
+            <DeleteModal />
         </>
     )
 }
 
-export default ModalsManager;
+export default ModalsManager

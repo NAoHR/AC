@@ -6,6 +6,10 @@ interface Ilogin {
     password: string
 }
 
+interface Id {
+    id: String
+}
+
 const getToken = () => {
     return window.localStorage.getItem("token")
 }
@@ -42,6 +46,17 @@ const apiMethod = {
     },
     getDetails: function(){
         return axios.get(`/api/data/detail`, {
+            headers : {
+                Authorization : getToken()
+            }
+        })
+    },
+
+    // delete
+    deleteCustomer: function(body: AxiosRequestConfig<Id>){
+        const {data} = body;
+
+        return axios.delete(`/api/data/delete/${data}`, {
             headers : {
                 Authorization : getToken()
             }

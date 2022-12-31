@@ -54,10 +54,10 @@ const DataCard: FC<ICustomer> = ({_id, alamat, bulan, logKontak, nama, telepon})
                         <Button color={"blue"} variant="light" disabled={contentEditables} onClick={()=>{setCurrentModified(true, "detail", data)}}>
                             <IconFileDescription />
                         </Button>
-                        <Button color={"teal"} variant="light" disabled={contentEditables}>
+                        <Button color={"teal"} variant="light" disabled={contentEditables} >
                             <IconEdit />
                         </Button>
-                        <Button color={"red"} variant="light" disabled={contentEditables}>
+                        <Button color={"red"} variant="light" disabled={contentEditables} onClick={()=>{setCurrentModified(true, "delete", data)}}>
                             <IconTrash />
                         </Button>
                     </Flex>

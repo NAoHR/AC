@@ -116,6 +116,26 @@ const Paginate = () => {
 
 const Looper = () => {
     const customers = useAdminStore(state => state.customers);
+    const filter = useAdminStore(state => state.filter);
+    const [filteredData, setFD] = useState<ICustomer[]>([]);
+
+    useEffect(()=>{
+        if(typeof customers !== "boolean"){
+            setFD(customers.filter((customer)=> {
+                if(customer.nama.toLowerCase().includes(filter.text as string)){
+                    if(filter.isNonTouched){
+                        if(customer.currentLog){
+                            if((new Date().getTime() - new Date(customer.currentLog.tanggal).getTime()) <= 60*60*24*30*2){
+                                return false
+                            }
+                        }
+                    }
+                    return true
+                }
+              }))
+        }
+    }, [filter, customers])
+    
     
     if(typeof customers === "boolean"){
         return (
@@ -128,14 +148,18 @@ const Looper = () => {
             return (
                 <>
                 {
-                    customers.map((customer)=> {
-                        return (
-                            <DataCard key={customer._id as Key} {...customer} />
-                        )
+                    filteredData.length == 0 ? 
+                    <Text>
+                        Hasil Pencarian tidak ada
+                    </Text>
+                    :
+                    filteredData.map((customer) => {
+                        return <DataCard key={customer._id as Key} {...customer} />
                     })
                 }
                 </>
             )
+
         }
         return (
             <Text>

@@ -7,6 +7,10 @@ const init: IZustandStore = {
         isLoggedIn: false
     },
     contentEditables: false,
+    filter : {
+        text: "",
+        isNonTouched: false
+    },
     pagination: {
         current: 0,
         total: 0,
@@ -26,6 +30,7 @@ const init: IZustandStore = {
     updateCustomers() {},
     updateStats() {},
     setCurrentModified(){},
+    updateFilters() {},
     setPagination() {},
     updateEditable(){},
     updateUser() {},
@@ -73,6 +78,9 @@ const useAdminStore = create<IZustandStore>(( set, get ) => ({
     },
     updateEditable(val) {
         set({contentEditables: val})
+    },
+    updateFilters(f) {
+        set({filter: f})
     },
     setCurrentModified(status, method ,data) {
         return set({

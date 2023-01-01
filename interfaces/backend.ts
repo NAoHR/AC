@@ -12,7 +12,8 @@ export interface ICustomer {
     telepon: String,
     alamat : String,
     bulan: TMonth,
-    logKontak: Array<ILogKontak>
+    logKontak: Array<ILogKontak>,
+    currentLog?: ILogKontak
 }
 
 
@@ -36,12 +37,18 @@ export interface ICustPagination {
     total: number,
     isDisabled: boolean
 }
+
+export interface IFilter {
+    text: String,
+    isNonTouched: boolean
+}
 export interface IZustandStore {
     user : {
         username: String,
         isLoggedIn: boolean
     },
     contentEditables: boolean,
+    filter: IFilter,
     pagination: {
         current: number,
         total: number,
@@ -63,6 +70,7 @@ export interface IZustandStore {
     updateUser : (username: String, isLoggedIn: boolean) => void,
     updateCustomers: (data: ICustomer[]) => void
     updateStats: (isInit: boolean, data: ICustStat[] | ICustStat | boolean, num: number, month?: "januari" | "februari" | "maret" | "april" | "may" | "juni" | "juli" | "agustus" | "september" | "oktober" | "november" | "desember") => void,
+    updateFilters: (filter: IFilter) => void,
     setCurrentModified: (status: boolean, method:"detail" | "edit" | "delete" | "add" | "message" | "", data: null | ICustomer) => void
     setPagination: (data: ICustPagination) => void
     updateEditable: (val: boolean) => void,

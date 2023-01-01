@@ -4,7 +4,7 @@ import authenticationMiddleware from "../../../backend/middleware/authentication
 import errorHandler from "../../../backend/utils/errorHandler";
 import CustSchema from "../../../backend/models/Customer.model";
 
-const mongoosePaginate = require("mongoose-paginate-v2");
+const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 import {models, model} from "mongoose";
 
 
@@ -19,16 +19,26 @@ const handler = async (req, res) => {
               locale: 'en',
             },
         };
-        
         let CustomerModel = models.Cust || model("Cust", CustSchema);
-        CustomerModel.paginate = mongoosePaginate.paginate
+        
+        const aggregation = CustomerModel.aggregate([{
+            $addFields : {
+                currentLog: {
+                    $last: "$logKontak"
+                }
+            }
+        }]);
 
-        const customers = await CustomerModel.paginate({}, options);
+        CustomerModel.aggregatePaginate = aggregatePaginate.aggregatePaginate;
+
+        const customers = await CustomerModel.aggregatePaginate(aggregation, options);
 
         return res.status(200).json({
             ok: true,
             data: customers
         })
+
+
     }catch(e){
         return errorHandler(e, res);
     }

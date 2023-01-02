@@ -286,6 +286,7 @@ const SendMessageModal = () => {
                 const data = v.data.data as ICustomer;                
                 window.open(`https://api.whatsapp.com/send?phone=62${currentModified.data?.telepon}&text=${text}`, '_blank');
                 if(currentModified.data?._id){
+                    data.currentLog = data.logKontak[data.logKontak.length -1];
                     editCustomer(currentModified.data?._id, data);
                 }
                 setCurrentModified(false, "", null);

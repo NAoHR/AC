@@ -1,6 +1,7 @@
 import useAdminStore from "../../../utils/stores";
 import { Modal, Title, Text, List, ThemeIcon, Flex, TextInput, Textarea, Select, Button } from "@mantine/core";
 import { IconPhone, IconHome } from "@tabler/icons";
+import {toast} from "react-toastify"
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import apiMethod from "../../../utils/api";
@@ -128,9 +129,11 @@ const AddModal = () => {
                 addcustomer(data);
                 setCurrentModified(false, "", null);
                 updateStats(false, data, 1, data.bulan);
+                toast.success("Data Berhasil Ditambahkan");
             })
             .catch((e)=>{
-                console.log(e);
+                const err = e.response.data.message || "terjadi error";
+                toast.error(err);
             })
             .finally(()=>{
                 setRF(prev => !prev);
@@ -220,10 +223,12 @@ const DeleteModal = () => {
                         deleteCustomers(currentModified.data?._id)
                         updateStats(false, false, -1, currentModified.data?.bulan);
                         setCurrentModified(false, "", null);
+                        toast.success("Data Berhasil Dihapus")
                     }
                 })
                 .catch((e) => {
-                    console.log(e);
+                    const err = e.response.data.message || "terjadi error";
+                    toast.error(err);
                 })
                 .finally(()=>{
                     setRF(prev => !prev);
@@ -278,15 +283,17 @@ const SendMessageModal = () => {
         setRF(!reqFinished);
         apiMethod.addlog({data: currentModified.data?._id})
             .then((v) => {
-                const data = v.data.data as ICustomer;
+                const data = v.data.data as ICustomer;                
                 window.open(`https://api.whatsapp.com/send?phone=62${currentModified.data?.telepon}&text=${text}`, '_blank');
                 if(currentModified.data?._id){
                     editCustomer(currentModified.data?._id, data);
                 }
                 setCurrentModified(false, "", null);
+                toast.success("Log Histori Terupdate");
             })
             .catch((e) => {
-                console.log("error");
+                const err = e.response.data.message || "terjadi error";
+                toast.error(err);
                 
             })
             .finally(()=>{

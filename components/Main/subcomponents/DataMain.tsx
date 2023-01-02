@@ -125,7 +125,6 @@ const Looper = () => {
                 if(customer.nama.toLowerCase().includes(filter.text as string)){
                     if(filter.isNonTouched){
                         if(customer.currentLog){
-                            console.log(new Date().getTime() - new Date(customer.currentLog.tanggal).getTime(), customer.currentLog.tanggal);
                             
                             if((new Date().getTime() - new Date(customer.currentLog.tanggal).getTime()) <= 60*60*24*30*2*1000){
                                 return false

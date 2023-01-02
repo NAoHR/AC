@@ -25,7 +25,7 @@ const DetailModal = () => {
                                 <Flex justify={"space-between"} w="100%" key={i}>
                                     <Text fw="bold">
                                         {v.tanggal.getDate()}/
-                                        {v.tanggal.getMonth()}/
+                                        {v.tanggal.getMonth()+1}/
                                         {v.tanggal.getFullYear()}
                                     </Text>
                                     <Text color={v.status == "pending" ? "blue" : v.status == "mau" ? "green" : "red"} fw="bold">

@@ -43,8 +43,8 @@ const apiMethod = {
             }
         })
     },
-    getDatas: function(page=1){
-        return axios.get(`/api/data?page=${page}`, {
+    getDatas: function(page=1, bulan="all"){
+        return axios.get(`/api/data?page=${page}&bulan=${bulan}`, {
             headers : {
                 Authorization : getToken()
             }

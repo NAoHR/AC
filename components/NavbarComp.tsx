@@ -1,7 +1,9 @@
-import { Navbar, MultiSelect, TextInput, Flex, Group, Avatar, Text, useMantineTheme, Checkbox} from "@mantine/core";
-import {IconSearch, IconCirclePlus, IconAdjustmentsAlt, IconRefresh} from "@tabler/icons";
-import { useEffect, useState } from "react";
+import { Navbar, MultiSelect, TextInput, Flex, Group, Avatar, Text, useMantineTheme, Checkbox, Button} from "@mantine/core";
+import {IconSearch, IconCirclePlus, IconAdjustmentsAlt, IconSend} from "@tabler/icons";
+import { useState } from "react";
+import apiMethod from "../utils/api";
 import useAdminStore from "../utils/stores";
+import {ICustomer} from "../interfaces/backend"
 
 interface Navbar {
     opened: boolean
@@ -11,7 +13,13 @@ export default function NavbarComp(props: Navbar){
     const theme = useMantineTheme();
     const setCurrentModified = useAdminStore(state => state.setCurrentModified);
     const updateFilters = useAdminStore(state => state.updateFilters);
-    const filter = useAdminStore(state => state.filter)
+    const contentEditables = useAdminStore(state => state.contentEditables);
+    const updateEditable = useAdminStore(state => state.updateEditable);
+    const setCustomer = useAdminStore(state => state.updateCustomers);
+    const setPagination = useAdminStore(state => state.setPagination);
+
+
+    const [months, setM] = useState("all");
 
     const [check, setC] = useState(false);
 
@@ -65,7 +73,35 @@ export default function NavbarComp(props: Navbar){
                     { value: 'november', label: 'november' },
                     { value: 'desember', label: 'desember' },
                 ]}
+                onChange={(e) => {e.length == 0 ? setM("all") : setM(e.join(","))}}
                 />
+                <Button leftIcon={<IconSend />} variant="light" mt={"xs"} disabled={contentEditables} onClick={() => {
+                    updateEditable(true)
+                    console.log(1, months);
+                    
+                    apiMethod.getDatas(1, months)
+                        .then((v) => {
+                            const {page, totalPages} = v.data.data;
+                            const customers = v.data.data.docs as ICustomer[];
+
+                            setCustomer(customers);
+                            
+                            setPagination({
+                                current: page,
+                                isDisabled: false,
+                                total: totalPages
+                            })
+                            updateEditable(false)
+                        })
+                        .catch((e) => {
+
+                        })
+                        .finally(() => {
+                            updateEditable(useAdminStore.getState().contentEditables);
+                        })
+                }}>
+                  Dapatkan Data
+                </Button>
             </Flex>
         </Navbar>
         </>

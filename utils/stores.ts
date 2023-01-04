@@ -11,6 +11,7 @@ const init: IZustandStore = {
         text: "",
         isNonTouched: false
     },
+    query: "all",
     pagination: {
         current: 0,
         total: 0,
@@ -30,6 +31,7 @@ const init: IZustandStore = {
     updateCustomers() {},
     updateStats() {},
     setCurrentModified(){},
+    updateQuery() {},
     updateFilters() {},
     setPagination() {},
     updateEditable(){},
@@ -90,6 +92,9 @@ const useAdminStore = create<IZustandStore>(( set, get ) => ({
                 data: data
             }
         })        
+    },
+    updateQuery(month){
+        set({query: month});
     },
 
     // data manipulation related

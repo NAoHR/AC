@@ -49,6 +49,7 @@ export interface IZustandStore {
     },
     contentEditables: boolean,
     filter: IFilter,
+    query: "all" | String,
     pagination: {
         current: number,
         total: number,
@@ -72,6 +73,7 @@ export interface IZustandStore {
     updateStats: (isInit: boolean, data: ICustStat[] | ICustStat | boolean, num: number, month?: "januari" | "februari" | "maret" | "april" | "may" | "juni" | "juli" | "agustus" | "september" | "oktober" | "november" | "desember") => void,
     updateFilters: (filter: IFilter) => void,
     setCurrentModified: (status: boolean, method:"detail" | "edit" | "delete" | "add" | "message" | "", data: null | ICustomer) => void
+    updateQuery: (months: "all" | String) => void,
     setPagination: (data: ICustPagination) => void
     updateEditable: (val: boolean) => void,
     addCustomer: (data: ICustomer) => void,

@@ -84,7 +84,7 @@ const Paginate = () => {
             total: pagination.total
         })
         updateEditable(true);
-        apiMethod.getDatas(v)
+        apiMethod.getDatas(v, useAdminStore.getState().query)
             .then((v) => {
                 const {page, totalPages} = v.data.data;
                 const customers = v.data.data.docs as ICustomer[];

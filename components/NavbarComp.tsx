@@ -17,9 +17,7 @@ export default function NavbarComp(props: Navbar){
     const updateEditable = useAdminStore(state => state.updateEditable);
     const setCustomer = useAdminStore(state => state.updateCustomers);
     const setPagination = useAdminStore(state => state.setPagination);
-
-
-    const [months, setM] = useState("all");
+    const updateQuery = useAdminStore(state => state.updateQuery);
 
     const [check, setC] = useState(false);
 
@@ -73,13 +71,12 @@ export default function NavbarComp(props: Navbar){
                     { value: 'november', label: 'november' },
                     { value: 'desember', label: 'desember' },
                 ]}
-                onChange={(e) => {e.length == 0 ? setM("all") : setM(e.join(","))}}
+                onChange={(e) => {e.length == 0 ? updateQuery("all") : updateQuery(e.join(","))}}
                 />
                 <Button leftIcon={<IconSend />} variant="light" mt={"xs"} disabled={contentEditables} onClick={() => {
                     updateEditable(true)
-                    console.log(1, months);
                     
-                    apiMethod.getDatas(1, months)
+                    apiMethod.getDatas(1, useAdminStore.getState().query)
                         .then((v) => {
                             const {page, totalPages} = v.data.data;
                             const customers = v.data.data.docs as ICustomer[];

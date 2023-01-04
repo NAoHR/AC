@@ -10,7 +10,7 @@ import {models, model} from "mongoose";
 
 const handler = async (req, res) => {
     try{
-        const {page=1} = req.query;
+        const {page=1, bulan="all"} = req.query;
 
         const options = {
             page: isNaN(Number(page)) ? 1 : page,
@@ -20,14 +20,29 @@ const handler = async (req, res) => {
             },
         };
         let CustomerModel = models.Cust || model("Cust", CustSchema);
-        
-        const aggregation = CustomerModel.aggregate([{
-            $addFields : {
-                currentLog: {
-                    $last: "$logKontak"
+
+        const aggregate = [
+            {
+                $addFields : {
+                    currentLog: {
+                        $last: "$logKontak"
+                    }
                 }
             }
-        }]);
+        ]
+        
+
+        if(bulan && bulan !== "all") {
+            aggregate.push({
+                $match: {
+                    bulan : {
+                        $in : bulan.split(",")
+                    }
+                }
+            })
+        }
+        
+        const aggregation = CustomerModel.aggregate(aggregate);
 
         CustomerModel.aggregatePaginate = aggregatePaginate.aggregatePaginate;
 

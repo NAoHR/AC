@@ -1,4 +1,4 @@
-import { Schema, models, model } from "mongoose";
+import { Schema, ObjectId } from "mongoose";
 
 const CustSchema = new Schema({
     nama: {
@@ -20,6 +20,7 @@ const CustSchema = new Schema({
     },
     logKontak: [
         {
+            id: ObjectId,
             tanggal: Date,
             status: {
                 type: String,

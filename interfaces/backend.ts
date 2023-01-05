@@ -1,6 +1,7 @@
 import { NextApiRequest } from "next";
 
 export interface ILogKontak {
+    _id: string,
     tanggal: Date,
     status: "pending" | "mau" | "tidak"
 }

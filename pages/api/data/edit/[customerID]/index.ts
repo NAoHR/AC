@@ -15,23 +15,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         const CustomerModel = models.Cust || model("Cust", CustSchema);
 
-        const updateCreds = await CustomerModel.updateOne({
+
+        const updateCreds = await CustomerModel.findOneAndUpdate({
             _id : String(customerID)
         },body,{
             runValidators : true,
             new: true
         })
 
-        if(updateCreds.matchedCount !== 0){
-            if(updateCreds.modifiedCount){
-                return res.status(200).json({
-                    ok : true,
-                    message : "data updated"
-                })
+        
+        
+        if(updateCreds){
+            const objectifyCus = updateCreds.toObject();
+
+            if(objectifyCus.logKontak.length > 0){
+                objectifyCus.currentLog = objectifyCus.logKontak[objectifyCus.logKontak.length -1]
             }
             return res.status(200).json({
                 ok : true,
-                message : "0 updated"
+                message : "data updated",
+                data: objectifyCus
             })
         }
         throw({name: "DNF"})

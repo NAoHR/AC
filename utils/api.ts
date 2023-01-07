@@ -67,6 +67,17 @@ const apiMethod = {
                 Authorization : getToken()
             }
         })
+    },
+
+    // put
+    editCustomer : function(body: AxiosRequestConfig<ICustomer>) {
+        const {data} = body;
+        const {_id} = data as ICustomer;
+        return axios.put(`/api/data/edit/${_id}`, data, {
+            headers : {
+                Authorization : getToken()
+            }
+        })
     }
 }
 

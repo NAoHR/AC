@@ -1,11 +1,11 @@
 import useAdminStore from "../../../utils/stores";
-import { Modal, Title, Text, List, ThemeIcon, Flex, TextInput, Textarea, Select, Button } from "@mantine/core";
-import { IconPhone, IconHome } from "@tabler/icons";
+import { Modal, Title, Text, List, ThemeIcon, Flex, TextInput, Textarea, Select, Button, Group, Avatar } from "@mantine/core";
+import { IconPhone, IconHome, IconTrash } from "@tabler/icons";
 import {toast} from "react-toastify"
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import apiMethod from "../../../utils/api";
-import { ICustomer, TMonth } from "../../../interfaces/backend";
+import { ICustomer, ILogKontak, TMonth } from "../../../interfaces/backend";
 
 const DetailModal = () => {
     const currentModified = useAdminStore(state => state.currentModified);
@@ -336,6 +336,169 @@ const SendMessageModal = () => {
     )
 }
 
+
+const EditModal = () => {
+    const [reqFinished, setRF] = useState<boolean>(true);
+    const setCurrentModified = useAdminStore(state => state.setCurrentModified);
+    const currentModified = useAdminStore(state => state.currentModified);
+    const editCustomer = useAdminStore(state => state.editCustomer)
+
+    const [dataBeingModified, setDBM] = useState(currentModified.data);
+
+    const nameRef = useRef<HTMLInputElement>(null);
+    const telpRef = useRef<HTMLInputElement>(null);
+    const alamatRef = useRef<HTMLTextAreaElement>(null);
+    const bulanRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if(currentModified.data){
+            setDBM(currentModified.data)
+        }
+        
+    }, [currentModified])
+
+    return (
+        <>
+        <Modal
+            overlayOpacity={0.55}
+            overlayBlur={3}
+            overflow={"inside"}
+            opened={currentModified.display && currentModified.method == "edit"}
+            onClose={()=> {if (reqFinished) setCurrentModified(false, "", null)}}
+            title={
+                <Title order={5} mt={"xs"} color={"dimmed"}>
+                    Edit Data Customer
+                </Title>
+            }
+        >   
+        <form onSubmit={(e) => {
+            e.preventDefault();
+            setRF(!reqFinished);
+            apiMethod.editCustomer({data: dataBeingModified as ICustomer})
+                .then((v) => {
+                    const data = v.data.data as ICustomer;
+                    editCustomer(data._id, data)
+                    setCurrentModified(false, "", null);
+                    toast.success("Customer Terupdate");
+                })
+                .catch((e) => {
+                    const err = e.response.data.message || "terjadi error";
+                    toast.error(err);
+                })
+                .finally(() => {
+                    setRF(prev => !prev);
+                })
+            
+
+        }}>
+            <Flex mt={"sm"} direction="column" w="100%" gap="sm" mb="sm">
+                <TextInput
+                label="Nama"
+                ref={nameRef}
+                onChange={(e) => { if (dataBeingModified) {setDBM({...dataBeingModified, "nama" : e.target.value}); } }}
+                required={true}
+                defaultValue={currentModified.data?.nama as string}
+                placeholder="Lebron James"
+                />
+
+                <TextInput
+                required={true}
+                ref={telpRef}
+                label="Nomor Telepon"
+                onChange={(e) => { if (dataBeingModified) {setDBM({ ...dataBeingModified , "telepon" : e.target.value}); } }}
+                defaultValue={currentModified.data?.telepon as string}
+                placeholder="88xxxxxx"
+                />
+
+                <Textarea
+                label="Alamat"
+                ref={alamatRef}
+                required={true}
+                onChange={(e) => { if (dataBeingModified) {setDBM({ ...dataBeingModified , "alamat" : e.target.value}); } }}
+                defaultValue={currentModified.data?.alamat as string}
+                autosize
+                minRows={3}
+                placeholder="Jalan Jalan Ke Pasar Minggu"
+                />
+
+                <Select
+                label="Bulan"
+                ref={bulanRef}
+                defaultValue={currentModified.data?.bulan as string}
+                onChange={(e) => { if (dataBeingModified) {setDBM({ ...dataBeingModified , "bulan" : e as TMonth}); } }}
+                required={true}
+                placeholder="Pick one"
+                data={[
+                    { value: 'januari', label: 'januari' },
+                    { value: 'februari', label: 'februari' },
+                    { value: 'maret', label: 'maret' },
+                    { value: 'april', label: 'april' },
+                    { value: 'may', label: 'may' },
+                    { value: 'juni', label: 'juni' },
+                    { value: 'juli', label: 'juli' },
+                    { value: 'agustus', label: 'agustus' },
+                    { value: 'september', label: 'september' },
+                    { value: 'oktober', label: 'oktober' },
+                    { value: 'november', label: 'november' },
+                    { value: 'desember', label: 'desember' },
+                ]}
+                />
+                <Flex w="100%" mb={"sm"} direction={"column"} gap="xs">
+                    <Title order={5} mb={"xs"} >Histori Panggilan</Title>
+                    {
+                        currentModified.data?.logKontak.length == 0 ?
+                        <Text>Tidak ada Histori Panggilan</Text> 
+                        : 
+                        dataBeingModified?.logKontak.map((item) => {
+                            
+                            const dt = new Date(item.tanggal)
+
+                            return (
+                                <Flex justify={"space-between"} w="100%" pl={"xs"} align="center"  key={item._id}>
+                                    <Text fw="bold">
+                                        {dt.getDate()}/
+                                        {dt.getMonth()+1}/
+                                        {dt.getFullYear()}
+                                    </Text>
+                                    <Group>
+                                        <Select
+                                        w="120px"
+                                        // ref={bulanRef}
+                                        required={true}
+                                        placeholder="Status"
+                                        onChange={(e: "pending" | "mau" | "tidak") => { if (dataBeingModified) {setDBM({ ...dataBeingModified , "logKontak" : dataBeingModified.logKontak.map((subitem) => {
+                                            if(subitem._id === item._id){
+                                                return {
+                                                    ...subitem,
+                                                    status: e
+                                                }
+                                            }
+                                            return subitem
+                                        })}); } }}
+                                        defaultValue={item.status}
+                                        data={[
+                                            { value: 'pending', label: 'pending' },
+                                            { value: 'mau', label: 'mau' },
+                                            { value: 'tidak', label: 'tidak' }
+                                        ]}
+                                        />
+                                        <Avatar color={"red"} className="pointer" onClick={() => {if(dataBeingModified) { setDBM({...dataBeingModified, "logKontak" : dataBeingModified.logKontak.filter(e => e._id !== item._id) })}}}>
+                                            <IconTrash />
+                                        </Avatar>
+                                    </Group>
+                                </Flex>
+                            )
+                        })
+                    }
+                </Flex>
+                <Button w="130px" style={{alignSelf: "flex-end"}} type="submit" disabled={!reqFinished} variant="light" >Submit</Button>
+            </Flex>
+        </form>
+      </Modal>
+        </>
+    )
+}
+
 const ModalsManager = () => {
     return (
         <>
@@ -343,6 +506,7 @@ const ModalsManager = () => {
             <AddModal />
             <DeleteModal />
             <SendMessageModal />
+            <EditModal />
         </>
     )
 }

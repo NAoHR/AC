@@ -12,10 +12,10 @@ import apiMethod from "../../../utils/api";
 import { ICustomer } from "../../../interfaces/backend";
 import ModalsManager from "./ModalsManager";
 
-const DataCard: FC<ICustomer> = ({_id, alamat, bulan, logKontak, nama, telepon}) => {
+const DataCard: FC<ICustomer> = ({_id, alamat, bulan, logKontak, nama, telepon, currentLog}) => {
     const contentEditables = useAdminStore(state => state.contentEditables);
     const setCurrentModified = useAdminStore(state => state.setCurrentModified);
-    const data = {_id, alamat, bulan, logKontak, nama, telepon}
+    const data = {_id, alamat, bulan, logKontak, nama, telepon, currentLog}
 
     return (
     <>
@@ -54,7 +54,7 @@ const DataCard: FC<ICustomer> = ({_id, alamat, bulan, logKontak, nama, telepon})
                         <Button color={"blue"} variant="light" disabled={contentEditables} onClick={()=>{setCurrentModified(true, "detail", data)}}>
                             <IconFileDescription />
                         </Button>
-                        <Button color={"teal"} variant="light" disabled={contentEditables} >
+                        <Button color={"teal"} variant="light" disabled={contentEditables} onClick={()=>{setCurrentModified(true, "edit", data)}}>
                             <IconEdit />
                         </Button>
                         <Button color={"red"} variant="light" disabled={contentEditables} onClick={()=>{setCurrentModified(true, "delete", data)}}>

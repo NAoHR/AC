@@ -25,7 +25,7 @@ export default function LoginCon(){
             .then((v)=> {
                 const {token, username} = v.data.data;
                 window.localStorage.setItem("token", `Bearer ${token}`);
-                toast.success(`welcome ${username}`)
+                toast.success(`Selamat Datang ${username}`)
                 router.push("/")
             })
             .catch((e) => {
